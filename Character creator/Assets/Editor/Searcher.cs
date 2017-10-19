@@ -23,14 +23,17 @@ public class Searcher{
                 _SercherList.Add(AssetDatabase.LoadAssetAtPath(allPaths[i], typeof(Object)));
             }
        
-                EditorGUILayout.BeginHorizontal();
         for (i = _SercherList.Count - 1; i >= 0; i--)
         {
      
-            if (_SercherList[i].GetType() == typeof(GameObject) && _SercherList[i].name.Contains(bodyPart))
+            if (_SercherList[i].GetType() == typeof(GameObject))
             {
-
-                _listPreview = AssetPreview.GetAssetPreview(_SercherList[i]);
+                GameObject gO = (GameObject)_SercherList[i];
+                if( gO.tag == bodyPart)
+                {
+                EditorGUILayout.BeginHorizontal();
+               
+                    _listPreview = AssetPreview.GetAssetPreview(_SercherList[i]);
                 if (_listPreview != null)
                 {
                     GUI.DrawTexture(GUILayoutUtility.GetRect(50, 50, 50, 50), _listPreview, ScaleMode.ScaleToFit);
@@ -41,13 +44,17 @@ public class Searcher{
                 {
 
                     return part = (GameObject)_SercherList[i];
+                        
                 }
 
+                }
+                CharacterCreator.SpaceOnLine(4);
+
                 EditorGUILayout.EndVertical();
+                EditorGUILayout.EndHorizontal();
             }
 
         }
-                EditorGUILayout.EndHorizontal();
         return null;
     }
 }
