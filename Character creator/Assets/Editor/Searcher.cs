@@ -11,6 +11,8 @@ public class Searcher{
     GameObject part;
     string _partName;
 
+
+
     public GameObject searcher(string bodyPart) 
     {
         EditorGUILayout.LabelField("Search asset");
@@ -42,9 +44,7 @@ public class Searcher{
                 EditorGUILayout.LabelField(_SercherList[i].ToString());
                 if (GUILayout.Button("Select"))
                 {
-
                     return part = (GameObject)_SercherList[i];
-                        
                 }
 
                 }
@@ -57,4 +57,44 @@ public class Searcher{
         }
         return null;
     }
+    /*
+    public MonoScript ScriptSearcher ()
+    {
+
+
+        EditorGUILayout.LabelField("BUSCAR SCRIPT");
+
+
+        //GameObject[] allObjects = (GameObject[])Editor.FindObjectsOfType(typeof(GameObject));
+
+
+        
+        var aux = _scriptName;
+        _scriptName = EditorGUILayout.TextField(aux);
+        int i;
+        if (aux != _scriptName)
+        {
+            _scriptSearcher.Clear();
+            string[] allPaths = AssetDatabase.FindAssets(_scriptName);
+            for (i = allPaths.Length - 1; i >= 0; i--)
+            {
+                allPaths[i] = AssetDatabase.GUIDToAssetPath(allPaths[i]);
+                _scriptSearcher.Add(AssetDatabase.LoadAssetAtPath(allPaths[i], typeof(Object)));
+            }
+        }
+        for (i = _scriptSearcher.Count - 1; i >= 0; i--)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(_scriptSearcher[i].ToString());
+            if (GUILayout.Button("Seleccionar"))
+            {
+                return script = (MonoScript)_scriptSearcher[i];
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+        
+
+        return null;
+    }
+    */
 }

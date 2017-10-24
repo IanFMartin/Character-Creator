@@ -7,7 +7,9 @@ using UnityEditor;
 public class CharacterCreator : EditorWindow
 {
     string _newName;
-    Vector2  scroll;
+
+    Vector2 scroll;
+
     protected static GameObject _head;
     protected static GameObject _leftArm;
     protected static GameObject _rightArm;
@@ -21,6 +23,11 @@ public class CharacterCreator : EditorWindow
     protected static Texture2D _leftLegPreview;
     protected static Texture2D _rightLegPreview;
     protected static Texture2D _bodyPreview;
+
+    List<Object> _scriptSearcher = new List<Object>();
+    MonoScript script;
+    string _scriptName;
+    List<Object> scriptList = new List<Object>();
     #region var useless
     //private Texture2D _listHeadPreview;
     //private Texture2D _listLeftArmPreview;
@@ -55,7 +62,7 @@ public class CharacterCreator : EditorWindow
     private void OnGUI()
     {
         minSize = new Vector2(500, 800);
-        //maxSize = new Vector2(500, 800);
+        maxSize = new Vector2(500, 800);
         #region My Style
         var myStyle = new GUIStyle(GUI.skin.label);
         myStyle.alignment = TextAnchor.MiddleCenter;
@@ -65,12 +72,12 @@ public class CharacterCreator : EditorWindow
         EditorGUILayout.Space();
 
         EditorGUILayout.LabelField("Character Creator", myStyle);
-        scroll= GUILayout.BeginScrollView(scroll);
+        scroll = EditorGUILayout.BeginScrollView(scroll, true, false, GUILayout.Width(Screen.width), GUILayout.Height(Screen.height - 20));
 
         if (_head == null)
         {
 
-            if (GUI.Button(new Rect(200, 30, 100, 100), "Cabeza"))
+            if (GUI.Button(new Rect(200, 30, 100, 100), "Head"))
 
             {
                 ((HeadSelector)GetWindow(typeof(HeadSelector))).Show();
@@ -81,7 +88,7 @@ public class CharacterCreator : EditorWindow
         if (_body == null)
         {
 
-            if (GUI.Button(new Rect(175, 140, 150, 200), "Cuerpo"))
+            if (GUI.Button(new Rect(175, 140, 150, 200), "Body"))
             {
                 ((BodySelector)GetWindow(typeof(BodySelector))).Show();
             }
@@ -92,7 +99,7 @@ public class CharacterCreator : EditorWindow
         if (_leftArm == null)
         {
 
-            if (GUI.Button(new Rect(115, 140, 50, 175), "B-Izquierdo"))
+            if (GUI.Button(new Rect(115, 140, 50, 175), "Left" + "\n" + "Arm"))
             {
                 ((LeftArmSelector)GetWindow(typeof(LeftArmSelector))).Show();
             }
@@ -101,7 +108,7 @@ public class CharacterCreator : EditorWindow
             ((LeftArmSelector)GetWindow(typeof(LeftArmSelector))).Show();
         if (_rightArm == null)
         {
-            if (GUI.Button(new Rect(335, 140, 50, 175), "B-Derecho"))
+            if (GUI.Button(new Rect(335, 140, 50, 175), "Right" + "\n" + "Arm"))
             {
 
                 ((RightArmSelector)GetWindow(typeof(RightArmSelector))).Show();
@@ -112,7 +119,7 @@ public class CharacterCreator : EditorWindow
 
         if (_leftLeg == null)
         {
-            if (GUI.Button(new Rect(175, 350, 60, 175), "L-Izquierda"))
+            if (GUI.Button(new Rect(175, 350, 60, 175), "Left" + "\n" + "Leg"))
             {
                 ((LeftLegSelector)GetWindow(typeof(LeftLegSelector))).Show();
 
@@ -125,7 +132,7 @@ public class CharacterCreator : EditorWindow
         if (_rightLeg == null)
         {
 
-            if (GUI.Button(new Rect(265, 350, 60, 175), "L-Derecha"))
+            if (GUI.Button(new Rect(265, 350, 60, 175), "Right" + "\n" + "Leg"))
             {
 
                 ((RightLegSelector)GetWindow(typeof(RightLegSelector))).Show();
@@ -138,9 +145,15 @@ public class CharacterCreator : EditorWindow
         if (_body != null || _head != null && _leftArm != null &&
             _rightArm != null && _leftLeg != null && _rightLeg != null)
         {
-              _newName = EditorGUI.TextField(new Rect(0,540,500,50),"Name ", _newName);
-            if (GUI.Button(new Rect(110,605,100,100) ,"Create and save"))
+            GUILayout.BeginVertical();
+            _newName = EditorGUI.TextField(new Rect(5, 540, 400, 20), "Name ", _newName);
+            if (GUI.Button(new Rect(100, 575, 120, 25), "Create and save"))
             {
+
+                if (_newName == null || _newName == "")
+                {
+                    _newName = "Character ";
+                }
                 var _Character = new GameObject(_newName);
 
                 var _neck = _body.transform.Find("Neck");
@@ -171,15 +184,56 @@ public class CharacterCreator : EditorWindow
                 _rightLegInstantiated.transform.parent = _Character.transform;
                 _leftLegInstantiated.transform.parent = _Character.transform;
 
-
                 var asd = PrefabUtility.CreateEmptyPrefab("Assets/Prefab/" + _newName + ".prefab");
                 PrefabUtility.ReplacePrefab(_Character, asd);
             }
-            if (GUI.Button(new Rect(350, 605, 100, 100),"Close"))
+            /*
+            for (int j = scriptList.Count - 1; j >= 0; j--)
+            {
+                if (scriptList[j] == null)
+                {
+                    scriptList[j] = (MonoScript)EditorGUILayout.ObjectField(script, typeof(MonoScript), true);
+                    //scriptList.Add((MonoScript)EditorGUILayout.ObjectField(script, typeof(MonoScript), true));
+                }
+            }
+            
+            if (script == null)
+            {
+                script = (MonoScript)EditorGUILayout.ObjectField(script, typeof(MonoScript), true);
+            }
+            
+            var aux = _scriptName;
+            _scriptName = EditorGUILayout.TextField(aux);
+            int i;
+            if (aux != _scriptName)
+            {
+                _scriptSearcher.Clear();
+                string[] allPaths = AssetDatabase.FindAssets(_scriptName);
+                for (i = allPaths.Length - 1; i >= 0; i--)
+                {
+                    allPaths[i] = AssetDatabase.GUIDToAssetPath(allPaths[i]);
+                    _scriptSearcher.Add(AssetDatabase.LoadAssetAtPath(allPaths[i], typeof(Object)));
+                }
+            }
+            for (i = _scriptSearcher.Count - 1; i >= 0; i--)
+            {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(_scriptSearcher[i].ToString());
+                if (GUILayout.Button("Seleccionar"))
+                {
+                    for (int j = scriptList.Count - 1; j >= 0; j--)
+                    {
+                        scriptList.Add((MonoScript)_scriptSearcher[i]);
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
+            }
+            */
+            if (GUI.Button(new Rect(350, 575, 100, 25), "Close"))
             {
                 Close();
             }
-            if (GUI.Button(new Rect(235, 605, 100, 100),"Clear"))
+            if (GUI.Button(new Rect(235, 575, 100, 25), "Clear"))
             {
                 _body = null;
                 _head = null;
@@ -188,8 +242,8 @@ public class CharacterCreator : EditorWindow
                 _leftLeg = null;
                 _rightLeg = null;
             }
+            GUILayout.EndVertical();
         }
-
         GUILayout.EndScrollView();
     }
     public static void SpaceOnLine(int N)
