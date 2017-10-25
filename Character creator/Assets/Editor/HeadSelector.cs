@@ -6,6 +6,10 @@ using UnityEditor;
 
 public class HeadSelector : CharacterCreator
 {
+    public static int force;
+    public static int shield;
+    public static int life;
+
     private void OnGUI()
     {
 
@@ -23,6 +27,9 @@ public class HeadSelector : CharacterCreator
 
 
         _head = (GameObject)EditorGUILayout.ObjectField("Head :", _head, typeof(GameObject), true);
+        life = EditorGUILayout.IntField("Life: ", life);
+        shield = EditorGUILayout.IntField("Shield: ", shield);
+        force = EditorGUILayout.IntField("Force: ", force);
 
         if (_head == null) _head = partSearcher.searcher("Head");
         else

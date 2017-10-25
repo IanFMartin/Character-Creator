@@ -6,6 +6,10 @@ using UnityEditor;
 
 public class RightArmSelector : CharacterCreator
 {
+    public static int force;
+    public static int shield;
+    public static int life;
+
     private void OnGUI()
     {
 
@@ -21,6 +25,10 @@ public class RightArmSelector : CharacterCreator
         minSize = new Vector2(400, 400);
         maxSize = new Vector2(400, 400);
         _rightArm = (GameObject)EditorGUILayout.ObjectField("Right arm :", _rightArm, typeof(GameObject), true);
+        life = EditorGUILayout.IntField("Life: ", life);
+        shield = EditorGUILayout.IntField("Shield: ", shield);
+        force = EditorGUILayout.IntField("Force: ", force);
+
         if (_rightArm == null) _rightArm = partSearcher.searcher("Arm");
         else
         {

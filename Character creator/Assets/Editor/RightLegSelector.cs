@@ -6,6 +6,10 @@ using UnityEditor;
 
 public class RightLegSelector : CharacterCreator
 {
+    public static int force;
+    public static int shield;
+    public static int life;
+
     private void OnGUI()
     {
         var myStyle = new GUIStyle(GUI.skin.label);
@@ -20,6 +24,10 @@ public class RightLegSelector : CharacterCreator
 
         CharacterCreator.SpaceOnLine(2);
         _rightLeg = (GameObject)EditorGUILayout.ObjectField("Right leg :", _rightLeg, typeof(GameObject), true);
+        life = EditorGUILayout.IntField("Life: ", life);
+        shield = EditorGUILayout.IntField("Shield: ", shield);
+        force = EditorGUILayout.IntField("Force: ", force);
+
         if (_rightLeg == null) _rightLeg = partSearcher.searcher("Leg");
         else
         {
