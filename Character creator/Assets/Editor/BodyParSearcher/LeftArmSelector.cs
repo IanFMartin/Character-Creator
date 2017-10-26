@@ -27,17 +27,41 @@ public class LeftArmSelector : CharacterCreator
         maxSize = new Vector2(400, 400);
 
         _leftArm = (GameObject)EditorGUILayout.ObjectField("Left arm :", _leftArm, typeof(GameObject), true);
-        life = EditorGUILayout.IntField("Life: ", life);
-        shield = EditorGUILayout.IntField("Shield: ", shield);
-        force = EditorGUILayout.IntField("Force: ", force);
 
-        if (_leftArm == null) _leftArm = partSearcher.searcher("Arm");
+        if (_leftArm == null)
+        {
+            _leftArm = partSearcher.searcher("Arm");
+            force = 0;
+            shield = 0;
+            life = 0;
+        }
         else
         {
             _leftArmPreview = AssetPreview.GetAssetPreview(_leftArm);
             if (_leftArmPreview != null)
             {
                 GUI.DrawTexture(GUILayoutUtility.GetRect(50, 50, 50, 50), _leftArmPreview, ScaleMode.ScaleToFit);
+            }
+            life = EditorGUILayout.IntField("Life: ", life);
+            if (life < 0)
+            {
+                EditorGUILayout.HelpBox("Can not be less than 0", MessageType.Error);
+                life = 0;
+
+            }
+            shield = EditorGUILayout.IntField("Shield: ", shield);
+            if (shield < 0)
+            {
+                EditorGUILayout.HelpBox("Can not be less than 0", MessageType.Error);
+                shield = 0;
+
+            }
+            force = EditorGUILayout.IntField("Force: ", force);
+            if (force < 0)
+            {
+                EditorGUILayout.HelpBox("Can not be less than 0", MessageType.Error);
+                force = 0;
+
             }
             if (GUILayout.Button("Clear"))
             {

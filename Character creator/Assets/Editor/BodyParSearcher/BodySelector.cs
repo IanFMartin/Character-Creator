@@ -27,17 +27,41 @@ public class BodySelector : CharacterCreator
 
         EditorGUILayout.LabelField("Body Selector", myStyle);
         _body = (GameObject)EditorGUILayout.ObjectField("Body :", _body, typeof(GameObject), true);
-        life = EditorGUILayout.IntField("Life: ", life);
-        shield = EditorGUILayout.IntField("Shield: ", shield);
-        force = EditorGUILayout.IntField("Force: ", force);
 
-        if (_body == null) _body = partSearcher.searcher("Body");
+        if (_body == null)
+        {
+            _body = partSearcher.searcher("Body");
+            force = 0;
+            shield = 0;
+            life = 0;
+        }
         else
         {
             _bodyPreview = AssetPreview.GetAssetPreview(_body);
             if (_bodyPreview != null)
             {
                 GUI.DrawTexture(GUILayoutUtility.GetRect(50, 50, 50, 50), _bodyPreview, ScaleMode.ScaleToFit);
+            }
+            life = EditorGUILayout.IntField("Life: ", life);
+            if (life < 0)
+            {
+                EditorGUILayout.HelpBox("Can not be less than 0", MessageType.Error);
+                life = 0;
+
+            }
+            shield = EditorGUILayout.IntField("Shield: ", shield);
+            if (shield < 0)
+            {
+                EditorGUILayout.HelpBox("Can not be less than 0", MessageType.Error);
+                shield = 0;
+
+            }
+            force = EditorGUILayout.IntField("Force: ", force);
+            if (force < 0)
+            {
+                EditorGUILayout.HelpBox("Can not be less than 0", MessageType.Error);
+                force = 0;
+
             }
             if (GUILayout.Button("Clear"))
             {
@@ -55,6 +79,6 @@ public class BodySelector : CharacterCreator
 
     }
 
-               
+
 }
 

@@ -7,8 +7,13 @@ using UnityEditor;
 public class CharacterCreator : EditorWindow
 {
     string _newName;
+    string _scriptName;
 
     Vector2 scroll;
+
+    int totalLife;
+    int totalShield;
+    int totalForce;
 
     protected static GameObject _head;
     protected static GameObject _leftArm;
@@ -25,9 +30,13 @@ public class CharacterCreator : EditorWindow
     protected static Texture2D _bodyPreview;
 
     List<Object> _scriptSearcher = new List<Object>();
-    MonoScript script;
-    string _scriptName;
     List<Object> scriptList = new List<Object>();
+
+    MonoScript script;
+
+    Character character;
+
+    
     #region var useless
     //private Texture2D _listHeadPreview;
     //private Texture2D _listLeftArmPreview;
@@ -147,7 +156,22 @@ public class CharacterCreator : EditorWindow
         {
             GUILayout.BeginVertical();
             _newName = EditorGUI.TextField(new Rect(5, 540, 400, 20), "Name ", _newName);
-            if (GUI.Button(new Rect(100, 575, 120, 25), "Create and save"))
+
+            totalLife = HeadSelector.life + LeftArmSelector.life + LeftLegSelector.life +
+                        RightArmSelector.life + RightLegSelector.life + BodySelector.life;
+            totalForce = HeadSelector.force + LeftArmSelector.force + LeftLegSelector.force +
+                        RightArmSelector.force + RightLegSelector.force + BodySelector.force;
+            totalShield = HeadSelector.shield + LeftArmSelector.shield + LeftLegSelector.shield +
+                        RightArmSelector.shield + RightLegSelector.shield + BodySelector.shield;
+
+            EditorGUI.LabelField(new Rect(100, 575, 120, 25), "Total Life :  " + totalLife);
+            EditorGUI.LabelField(new Rect(235, 575, 120, 25), "Total Shield :  " + totalShield);
+            EditorGUI.LabelField(new Rect(365, 575, 120, 25), "Total Force :  " + totalForce);
+
+
+
+
+            if (GUI.Button(new Rect(100, 615, 120, 25), "Create and save"))
             {
 
                 if (_newName == null || _newName == "")
@@ -185,8 +209,10 @@ public class CharacterCreator : EditorWindow
                 _rightLegInstantiated.transform.parent = _Character.transform;
                 _leftLegInstantiated.transform.parent = _Character.transform;
 
-                var asd = PrefabUtility.CreateEmptyPrefab("Assets/Prefab/" + _newName + ".prefab");
-                PrefabUtility.ReplacePrefab(_Character, asd);
+                _Character.AddComponent<Character>();
+                character = _Character.GetComponent<Character>();
+                var emptyPrefab = PrefabUtility.CreateEmptyPrefab("Assets/Prefab/" + _newName + ".prefab");
+                PrefabUtility.ReplacePrefab(_Character, emptyPrefab);
 
                 #region Body Script
                 BodySelector bodyScript = new BodySelector();
@@ -429,53 +455,11 @@ public class CharacterCreator : EditorWindow
             }
 
 
-            /*
-            for (int j = scriptList.Count - 1; j >= 0; j--)
-            {
-                if (scriptList[j] == null)
-                {
-                    scriptList[j] = (MonoScript)EditorGUILayout.ObjectField(script, typeof(MonoScript), true);
-                    //scriptList.Add((MonoScript)EditorGUILayout.ObjectField(script, typeof(MonoScript), true));
-                }
-            }
-            
-            if (script == null)
-            {
-                script = (MonoScript)EditorGUILayout.ObjectField(script, typeof(MonoScript), true);
-            }
-            
-            var aux = _scriptName;
-            _scriptName = EditorGUILayout.TextField(aux);
-            int i;
-            if (aux != _scriptName)
-            {
-                _scriptSearcher.Clear();
-                string[] allPaths = AssetDatabase.FindAssets(_scriptName);
-                for (i = allPaths.Length - 1; i >= 0; i--)
-                {
-                    allPaths[i] = AssetDatabase.GUIDToAssetPath(allPaths[i]);
-                    _scriptSearcher.Add(AssetDatabase.LoadAssetAtPath(allPaths[i], typeof(Object)));
-                }
-            }
-            for (i = _scriptSearcher.Count - 1; i >= 0; i--)
-            {
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(_scriptSearcher[i].ToString());
-                if (GUILayout.Button("Seleccionar"))
-                {
-                    for (int j = scriptList.Count - 1; j >= 0; j--)
-                    {
-                        scriptList.Add((MonoScript)_scriptSearcher[i]);
-                    }
-                }
-                EditorGUILayout.EndHorizontal();
-            }
-            */
-            if (GUI.Button(new Rect(350, 575, 100, 25), "Close"))
+            if (GUI.Button(new Rect(350, 615, 100, 25), "Close"))
             {
                 Close();
             }
-            if (GUI.Button(new Rect(235, 575, 100, 25), "Clear"))
+            if (GUI.Button(new Rect(235, 615, 100, 25), "Clear"))
             {
                 _body = null;
                 _head = null;
@@ -483,6 +467,9 @@ public class CharacterCreator : EditorWindow
                 _rightArm = null;
                 _leftLeg = null;
                 _rightLeg = null;
+                totalForce = 0;
+                totalLife = 0;
+                totalShield = 0;
             }
             GUILayout.EndVertical();
         }
@@ -497,232 +484,5 @@ public class CharacterCreator : EditorWindow
 
         }
     }
-    #region Searcher
-    //    private void HeadSearcher()
-    //    {
-    //        EditorGUILayout.LabelField("Search asset");
-    //        var aux = _partName;
-    //        _partName = EditorGUILayout.TextField(aux);
-    //        int i;
-    //        if (aux != _partName)
-    //        {
-    //            _headList.Clear();
-    //            string[] allPaths = AssetDatabase.FindAssets(_partName);
-    //            for (i = allPaths.Length - 1; i >= 0; i--)
-    //            {
-    //                allPaths[i] = AssetDatabase.GUIDToAssetPath(allPaths[i]);
-    //                _headList.Add(AssetDatabase.LoadAssetAtPath(allPaths[i], typeof(Object)));
-    //            }
-    //        }
-    //        for (i = _headList.Count - 1; i >= 0; i--)
-    //        {
-    //            if (_headList[i].GetType() == typeof(GameObject) && _headList[i].name.Contains("Head"))
-    //            {
-    //                EditorGUILayout.BeginHorizontal();
-    //                EditorGUILayout.LabelField(_headList[i].ToString());
-    //                _listHeadPreview = AssetPreview.GetAssetPreview(_headList[i]);
-    //                if (_listHeadPreview != null)
-    //                {
-    //                    GUI.DrawTexture(GUILayoutUtility.GetRect(50, 50, 50, 50), _listHeadPreview, ScaleMode.ScaleToFit);
-    //                }
-    //                if (GUILayout.Button("Select"))
-    //                {
-
-    //                    _head = (GameObject)_headList[i];
-    //                }
-    //                EditorGUILayout.EndHorizontal();
-    //            }
-
-    //        }
-    //    }
-
-    //    private void BodySearcher()
-    //    {
-    //        EditorGUILayout.LabelField("Search asset");
-    //        var aux = _partName2;
-    //        _partName2 = EditorGUILayout.TextField(aux);
-    //        int i;
-    //        if (aux != _partName2)
-    //        {
-    //            _bodyList.Clear();
-    //            string[] allPaths = AssetDatabase.FindAssets(_partName2);
-    //            for (i = allPaths.Length - 1; i >= 0; i--)
-    //            {
-    //                allPaths[i] = AssetDatabase.GUIDToAssetPath(allPaths[i]);
-    //                _bodyList.Add(AssetDatabase.LoadAssetAtPath(allPaths[i], typeof(Object)));
-    //            }
-    //        }
-    //        for (i = _bodyList.Count - 1; i >= 0; i--)
-    //        {
-    //            if (_bodyList[i].GetType() == typeof(GameObject) && _bodyList[i].name.Contains("Body"))
-    //            {
-    //                EditorGUILayout.BeginHorizontal();
-    //                EditorGUILayout.LabelField(_bodyList[i].ToString());
-    //                _listBodyPreview = AssetPreview.GetAssetPreview(_bodyList[i]);
-    //                if (_listBodyPreview != null)
-    //                {
-    //                    GUI.DrawTexture(GUILayoutUtility.GetRect(50, 50, 50, 50), _listBodyPreview, ScaleMode.ScaleToFit);
-    //                }
-    //                if (GUILayout.Button("Select"))
-    //                {
-
-    //                    _body = (GameObject)_bodyList[i];
-    //                }
-    //                EditorGUILayout.EndHorizontal();
-    //            }
-
-    //        }
-    //    }
-
-    //    private void LeftArmSearcher()
-    //    {
-    //        EditorGUILayout.LabelField("Search asset");
-    //        var aux = _partName3;
-    //        _partName3 = EditorGUILayout.TextField(aux);
-    //        int i;
-    //        if (aux != _partName3)
-    //        {
-    //            _leftArmsList.Clear();
-    //            string[] allPaths = AssetDatabase.FindAssets(_partName3);
-    //            for (i = allPaths.Length - 1; i >= 0; i--)
-    //            {
-    //                allPaths[i] = AssetDatabase.GUIDToAssetPath(allPaths[i]);
-    //                _leftArmsList.Add(AssetDatabase.LoadAssetAtPath(allPaths[i], typeof(Object)));
-    //            }
-    //        }
-    //        for (i = _leftArmsList.Count - 1; i >= 0; i--)
-    //        {
-    //            if (_leftArmsList[i].GetType() == typeof(GameObject) && _leftArmsList[i].name.Contains("Arm"))
-    //            {
-    //                EditorGUILayout.BeginHorizontal();
-    //                EditorGUILayout.LabelField(_leftArmsList[i].ToString());
-    //                _listLeftArmPreview = AssetPreview.GetAssetPreview(_leftArmsList[i]);
-    //                if (_listLeftArmPreview != null)
-    //                {
-    //                    GUI.DrawTexture(GUILayoutUtility.GetRect(50, 50, 50, 50), _listLeftArmPreview, ScaleMode.ScaleToFit);
-    //                }
-    //                if (GUILayout.Button("Select"))
-    //                {
-
-    //                    _leftArm = (GameObject)_leftArmsList[i];
-    //                }
-    //                EditorGUILayout.EndHorizontal();
-    //            }
-
-    //        }
-    //    }
-
-    //    private void RightArmSearcher()
-    //    {
-    //        EditorGUILayout.LabelField("Search asset");
-    //        var aux = _partName4;
-    //        _partName4 = EditorGUILayout.TextField(aux);
-    //        int i;
-    //        if (aux != _partName4)
-    //        {
-    //            _rightArmList.Clear();
-    //            string[] allPaths = AssetDatabase.FindAssets(_partName4);
-    //            for (i = allPaths.Length - 1; i >= 0; i--)
-    //            {
-    //                allPaths[i] = AssetDatabase.GUIDToAssetPath(allPaths[i]);
-    //                _rightArmList.Add(AssetDatabase.LoadAssetAtPath(allPaths[i], typeof(Object)));
-    //            }
-    //        }
-    //        for (i = _rightArmList.Count - 1; i >= 0; i--)
-    //        {
-    //            if (_rightArmList[i].GetType() == typeof(GameObject) && _rightArmList[i].name.Contains("Arm"))
-    //            {
-    //                EditorGUILayout.BeginHorizontal();
-    //                EditorGUILayout.LabelField(_rightArmList[i].ToString());
-    //                _listRightArmPrewview = AssetPreview.GetAssetPreview(_rightArmList[i]);
-    //                if (_listRightArmPrewview != null)
-    //                {
-    //                    GUI.DrawTexture(GUILayoutUtility.GetRect(50, 50, 50, 50), _listRightArmPrewview, ScaleMode.ScaleToFit);
-    //                }
-    //                if (GUILayout.Button("Select"))
-    //                {
-
-    //                    _rightArm = (GameObject)_rightArmList[i];
-    //                }
-    //                EditorGUILayout.EndHorizontal();
-    //            }
-
-    //        }
-    //    }
-
-    //private void LeftLegSearcher()
-    //    {
-    //        EditorGUILayout.LabelField("Search asset");
-    //        var aux = _partName5;
-    //        _partName5 = EditorGUILayout.TextField(aux);
-    //        int i;
-    //        if (aux != _partName5)
-    //        {
-    //            _leftLegList.Clear();
-    //            string[] allPaths = AssetDatabase.FindAssets(_partName5);
-    //            for (i = allPaths.Length - 1; i >= 0; i--)
-    //            {
-    //                allPaths[i] = AssetDatabase.GUIDToAssetPath(allPaths[i]);
-    //                _leftLegList.Add(AssetDatabase.LoadAssetAtPath(allPaths[i], typeof(Object)));
-    //            }
-    //        }
-    //        for (i = _leftLegList.Count - 1; i >= 0; i--)
-    //        {
-    //            if (_leftLegList[i].GetType() == typeof(GameObject) && _leftLegList[i].name.Contains("Leg"))
-    //            {
-    //                EditorGUILayout.BeginHorizontal();
-    //                EditorGUILayout.LabelField(_leftLegList[i].ToString());
-    //                _listLeftLegPreview = AssetPreview.GetAssetPreview(_leftLegList[i]);
-    //                if (_listLeftLegPreview != null)
-    //                {
-    //                    GUI.DrawTexture(GUILayoutUtility.GetRect(50, 50, 50, 50), _listLeftLegPreview, ScaleMode.ScaleToFit);
-    //                }
-    //                if (GUILayout.Button("Select"))
-    //                {
-
-    //                    _leftLeg = (GameObject)_leftLegList[i];
-    //                }
-    //                EditorGUILayout.EndHorizontal();
-    //            }
-
-    //        }
-    //    }
-
-    //    private void RightLegSearcher()
-    //    {
-    //        EditorGUILayout.LabelField("Search asset");
-    //        var aux = _partName6;
-    //        _partName6 = EditorGUILayout.TextField(aux);
-    //        int i;
-    //        if (aux != _partName6)
-    //        {
-    //            _rightLegList.Clear();
-    //            string[] allPaths = AssetDatabase.FindAssets(_partName6);
-    //            for (i = allPaths.Length - 1; i >= 0; i--)
-    //            {
-    //                allPaths[i] = AssetDatabase.GUIDToAssetPath(allPaths[i]);
-    //                _rightLegList.Add(AssetDatabase.LoadAssetAtPath(allPaths[i], typeof(Object)));
-    //            }
-    //        }
-    //        for (i = _rightLegList.Count - 1; i >= 0; i--)
-    //        {
-    //            if (_rightLegList[i].GetType() == typeof(GameObject) && _rightLegList[i].name.Contains("Leg"))
-    //            {
-    //                EditorGUILayout.BeginHorizontal();
-    //                EditorGUILayout.LabelField(_rightLegList[i].ToString());
-    //                _listRightLegPreview = AssetPreview.GetAssetPreview(_rightLegList[i]);
-    //                if (_listRightLegPreview != null)
-    //                {
-    //                    GUI.DrawTexture(GUILayoutUtility.GetRect(50, 50, 50, 50), _listRightLegPreview, ScaleMode.ScaleToFit);
-    //                }
-    //                if (GUILayout.Button("Select"))
-    //                {
-    //                    _rightLeg = (GameObject)_rightLegList[i];
-    //                }
-    //                EditorGUILayout.EndHorizontal();
-    //            }
-
-    //        }
-    //    }
-    #endregion
+    
 }

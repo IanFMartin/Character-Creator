@@ -27,17 +27,40 @@ public class HeadSelector : CharacterCreator
 
 
         _head = (GameObject)EditorGUILayout.ObjectField("Head :", _head, typeof(GameObject), true);
-        life = EditorGUILayout.IntField("Life: ", life);
-        shield = EditorGUILayout.IntField("Shield: ", shield);
-        force = EditorGUILayout.IntField("Force: ", force);
-
-        if (_head == null) _head = partSearcher.searcher("Head");
+        if (_head == null)
+        {
+            _head = partSearcher.searcher("Head");
+            force = 0;
+            shield = 0;
+            life = 0;
+        }
         else
         {
             _headPreview = AssetPreview.GetAssetPreview(_head);
             if (_headPreview != null)
             {
                 GUI.DrawTexture(GUILayoutUtility.GetRect(50, 50, 50, 50), _headPreview, ScaleMode.ScaleToFit);
+            }
+              life = EditorGUILayout.IntField("Life: ", life);
+            if(life < 0)
+            {
+                EditorGUILayout.HelpBox("Can not be less than 0", MessageType.Error);
+                life = 0;
+
+            }
+            shield = EditorGUILayout.IntField("Shield: ", shield);
+            if (shield < 0)
+            {
+                EditorGUILayout.HelpBox("Can not be less than 0", MessageType.Error);
+                shield = 0;
+
+            }
+            force = EditorGUILayout.IntField("Force: ", force);
+            if (force < 0)
+            {
+                EditorGUILayout.HelpBox("Can not be less than 0", MessageType.Error);
+                force = 0;
+
             }
             if (GUILayout.Button("Clear"))
             {
