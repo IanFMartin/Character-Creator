@@ -176,7 +176,7 @@ public class CharacterCreator : EditorWindow
             {
                 if (_newName == null || _newName == "")
                 {
-                    _newName = "Character ";
+                    _newName = "Character";
                 }
                 var _Character = new GameObject(_newName);
 
@@ -210,266 +210,26 @@ public class CharacterCreator : EditorWindow
                 _leftLegInstantiated.transform.parent = _Character.transform;
 
                 _Character.AddComponent<Character>();
-                character = _Character.GetComponent<Character>();
 
                 var emptyPrefab = PrefabUtility.CreateEmptyPrefab("Assets/Prefab/" + _newName + ".prefab");
                 PrefabUtility.ReplacePrefab(_Character, emptyPrefab);
 
-                string path = AssetDatabase.CreateFolder("Assets / ScriptableObject", _Character.name);
-
+                AssetDatabase.CreateFolder("Assets/ScriptableObject", _Character.name);
+                string path = "Assets/ScriptableObject/" + _Character.name + "/";
                 ScriptableObjectUtility.CreateAsset<BodypartStats>(path, "Body of " + _Character.name, BodySelector.life,
-                                                                    BodySelector.shield, BodySelector.force);
-                /* ScriptableObjectUtility.CreateAsset<BodypartStats>("Left arm of " + _Character.name,LeftArmSelector.life,
-                                                                     LeftArmSelector.shield, LeftArmSelector.force);
-                 ScriptableObjectUtility.CreateAsset<BodypartStats>("Right arm of " + _Character.name, RightArmSelector.life,
-                                                                     RightArmSelector.shield, RightArmSelector.force);
-                 ScriptableObjectUtility.CreateAsset<BodypartStats>("Left leg of " + _Character.name, LeftLegSelector.life,
-                                                                     LeftLegSelector.shield, LeftLegSelector.force);
-                 ScriptableObjectUtility.CreateAsset<BodypartStats>("Right leg of " + _Character.name, RightLegSelector.life,
-                                                                     RightLegSelector.shield, RightLegSelector.force);
-                 ScriptableObjectUtility.CreateAsset<BodypartStats>( "Head of " + _Character.name, HeadSelector.life,
-                                                                     HeadSelector.shield, HeadSelector.force);
- */
-                /*
-                                #region Body Script
-                                BodySelector bodyScript = new BodySelector();
-                                if (_body != null)
-                                {
+                                                                     BodySelector.shield, BodySelector.force);
+                ScriptableObjectUtility.CreateAsset<BodypartStats>(path, "Left arm of " + _Character.name, LeftArmSelector.life,
+                                                                    LeftArmSelector.shield, LeftArmSelector.force);
+                ScriptableObjectUtility.CreateAsset<BodypartStats>(path, "Right arm of " + _Character.name, RightArmSelector.life,
+                                                                    RightArmSelector.shield, RightArmSelector.force);
+                ScriptableObjectUtility.CreateAsset<BodypartStats>(path, "Left leg of " + _Character.name, LeftLegSelector.life,
+                                                                    LeftLegSelector.shield, LeftLegSelector.force);
+                ScriptableObjectUtility.CreateAsset<BodypartStats>(path, "Right leg of " + _Character.name, RightLegSelector.life,
+                                                                    RightLegSelector.shield, RightLegSelector.force);
+                ScriptableObjectUtility.CreateAsset<BodypartStats>(path, "Head of " + _Character.name, HeadSelector.life,
+                                                                    HeadSelector.shield, HeadSelector.force);
 
-                                    string name = _body.name.Replace(" ", "_");
-                                    name = name.Replace("-", "_");
-                                    string copyPath = "Assets/" + name + ".cs";
-                                    Debug.Log("Creating Classfile: " + copyPath);
-                                    if (System.IO.File.Exists(copyPath) == false)
-                                    {
-                                        using (System.IO.StreamWriter outfile =
-                                            new System.IO.StreamWriter(copyPath))
-                                        {
-                                            outfile.WriteLine("using UnityEngine;");
-                                            outfile.WriteLine("using System.Collections;");
-                                            outfile.WriteLine("");
-                                            outfile.WriteLine("public class " + name + " : MonoBehaviour {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" public int life = " + BodySelector.life + ";");
-                                            outfile.WriteLine(" public int shield = " + BodySelector.shield + ";");
-                                            outfile.WriteLine(" public int force = " + BodySelector.force + ";");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" // Use this for initialization");
-                                            outfile.WriteLine(" void Start () {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" }");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" // Update is called once per frame");
-                                            outfile.WriteLine(" void Update () {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" }");
-                                            outfile.WriteLine("}");
-                                        }
-                                    }
-                                    AssetDatabase.Refresh();
-                                    var scr = _Character.AddComponent(System.Type.GetType(name));
-                                }
-                                #endregion
-                                #region Head Script
-                                HeadSelector headScript = new HeadSelector();
-                                if (_head != null)
-                                {
-                                    string name = _head.name.Replace(" ", "_");
-                                    name = name.Replace("-", "_");
-                                    string copyPath = "Assets/" + name + ".cs";
-                                    Debug.Log("Creating Classfile: " + copyPath);
-                                    if (System.IO.File.Exists(copyPath) == false)
-                                    {
-                                        using (System.IO.StreamWriter outfile =
-                                            new System.IO.StreamWriter(copyPath))
-                                        {
-                                            outfile.WriteLine("using UnityEngine;");
-                                            outfile.WriteLine("using System.Collections;");
-                                            outfile.WriteLine("");
-                                            outfile.WriteLine("public class " + name + " : MonoBehaviour {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" public int life = " + HeadSelector.life + ";");
-                                            outfile.WriteLine(" public int shield = " + HeadSelector.shield + ";");
-                                            outfile.WriteLine(" public int force = " + HeadSelector.force + ";");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" // Use this for initialization");
-                                            outfile.WriteLine(" void Start () {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" }");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" // Update is called once per frame");
-                                            outfile.WriteLine(" void Update () {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" }");
-                                            outfile.WriteLine("}");
-                                        }
-                                    }
-                                    AssetDatabase.Refresh();
-                                    var scr = _Character.AddComponent(System.Type.GetType(name));
-                                }
-                                #endregion
-                                #region Left Arm Script
-                                LeftArmSelector leftArmScript = new LeftArmSelector();
-                                if (_leftArm != null)
-                                {
 
-                                    string name = _leftArm.name.Replace(" ", "_");
-                                    name = name.Replace("-", "_");
-                                    string copyPath = "Assets/" + name + ".cs";
-                                    Debug.Log("Creating Classfile: " + copyPath);
-                                    if (System.IO.File.Exists(copyPath) == false)
-                                    {
-                                        using (System.IO.StreamWriter outfile =
-                                            new System.IO.StreamWriter(copyPath))
-                                        {
-                                            outfile.WriteLine("using UnityEngine;");
-                                            outfile.WriteLine("using System.Collections;");
-                                            outfile.WriteLine("");
-                                            outfile.WriteLine("public class " + name + " : MonoBehaviour {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" public int life = " + LeftArmSelector.life + ";");
-                                            outfile.WriteLine(" public int shield = " + LeftArmSelector.shield + ";");
-                                            outfile.WriteLine(" public int force = " + LeftArmSelector.force + ";");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" // Use this for initialization");
-                                            outfile.WriteLine(" void Start () {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" }");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" // Update is called once per frame");
-                                            outfile.WriteLine(" void Update () {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" }");
-                                            outfile.WriteLine("}");
-                                        }
-                                    }
-                                    AssetDatabase.Refresh();
-                                    var scr = _Character.AddComponent(System.Type.GetType(name));
-                                }
-                                #endregion
-                                #region Right Arm Script
-                                RightArmSelector rightArmScript = new RightArmSelector();
-                                if (_rightArm != null)
-                                {
-
-                                    string name = _rightArm.name.Replace(" ", "_");
-                                    name = name.Replace("-", "_");
-                                    string copyPath = "Assets/" + name + ".cs";
-                                    Debug.Log("Creating Classfile: " + copyPath);
-                                    if (System.IO.File.Exists(copyPath) == false)
-                                    {
-                                        using (System.IO.StreamWriter outfile =
-                                            new System.IO.StreamWriter(copyPath))
-                                        {
-                                            outfile.WriteLine("using UnityEngine;");
-                                            outfile.WriteLine("using System.Collections;");
-                                            outfile.WriteLine("");
-                                            outfile.WriteLine("public class " + name + " : MonoBehaviour {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" public int life = " + RightArmSelector.life + ";");
-                                            outfile.WriteLine(" public int shield = " + RightArmSelector.shield + ";");
-                                            outfile.WriteLine(" public int force = " + RightArmSelector.force + ";");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" // Use this for initialization");
-                                            outfile.WriteLine(" void Start () {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" }");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" // Update is called once per frame");
-                                            outfile.WriteLine(" void Update () {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" }");
-                                            outfile.WriteLine("}");
-                                        }
-                                    }
-                                    AssetDatabase.Refresh();
-                                    var scr = _Character.AddComponent(System.Type.GetType(name));
-                                }
-                                #endregion
-                                #region Left Leg Script
-                                LeftLegSelector leftLegScript = new LeftLegSelector();
-                                if (_leftLeg != null)
-                                {
-
-                                    string name = _leftLeg.name.Replace(" ", "_");
-                                    name = name.Replace("-", "_");
-                                    string copyPath = "Assets/" + name + ".cs";
-                                    Debug.Log("Creating Classfile: " + copyPath);
-                                    if (System.IO.File.Exists(copyPath) == false)
-                                    {
-                                        using (System.IO.StreamWriter outfile =
-                                            new System.IO.StreamWriter(copyPath))
-                                        {
-                                            outfile.WriteLine("using UnityEngine;");
-                                            outfile.WriteLine("using System.Collections;");
-                                            outfile.WriteLine("");
-                                            outfile.WriteLine("public class " + name + " : MonoBehaviour {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" public int life = " + LeftLegSelector.life + ";");
-                                            outfile.WriteLine(" public int shield = " + LeftLegSelector.shield + ";");
-                                            outfile.WriteLine(" public int force = " + LeftLegSelector.force + ";");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" // Use this for initialization");
-                                            outfile.WriteLine(" void Start () {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" }");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" // Update is called once per frame");
-                                            outfile.WriteLine(" void Update () {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" }");
-                                            outfile.WriteLine("}");
-                                        }
-                                    }
-                                    AssetDatabase.Refresh();
-                                    var scr = _Character.AddComponent(System.Type.GetType(name));
-                                }
-                                #endregion
-                                #region Right Leg Script
-                                RightLegSelector rightLegScript = new RightLegSelector();
-                                if (_rightLeg != null)
-                                {
-                                    string name = _rightLeg.name.Replace(" ", "_");
-                                    name = name.Replace("-", "_");
-                                    string copyPath = "Assets/" + name + ".cs";
-                                    Debug.Log("Creating Classfile: " + copyPath);
-                                    if (System.IO.File.Exists(copyPath) == false)
-                                    {
-                                        using (System.IO.StreamWriter outfile =
-                                            new System.IO.StreamWriter(copyPath))
-                                        {
-                                            outfile.WriteLine("using UnityEngine;");
-                                            outfile.WriteLine("using System.Collections;");
-                                            outfile.WriteLine("");
-                                            outfile.WriteLine("public class " + name + " : MonoBehaviour {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" public int life = " + RightLegSelector.life + ";");
-                                            outfile.WriteLine(" public int shield = " + RightLegSelector.shield + ";");
-                                            outfile.WriteLine(" public int force = " + RightLegSelector.force + ";");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" // Use this for initialization");
-                                            outfile.WriteLine(" void Start () {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" }");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" // Update is called once per frame");
-                                            outfile.WriteLine(" void Update () {");
-                                            outfile.WriteLine(" ");
-                                            outfile.WriteLine(" }");
-                                            outfile.WriteLine("}");
-                                        }
-                                    }
-                                    AssetDatabase.Refresh();
-                                    var scr = _Character.AddComponent(System.Type.GetType(name));
-                                }
-                                #endregion
-                                */
             }
             #endregion
 
@@ -485,6 +245,7 @@ public class CharacterCreator : EditorWindow
                 _rightArm = null;
                 _leftLeg = null;
                 _rightLeg = null;
+                _newName = null;
                 totalForce = 0;
                 totalLife = 0;
                 totalShield = 0;
