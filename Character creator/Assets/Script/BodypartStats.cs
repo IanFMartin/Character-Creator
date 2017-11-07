@@ -11,7 +11,7 @@ public class BodypartStats : ScriptableObject
     public void infoOfVar (int l, int s, int f)
     {
         life = l;
-        shield = l;
-        force = l;
+        shield = s;
+        force = f;
     }
 }

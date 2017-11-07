@@ -81,7 +81,7 @@ public class CharacterCreator : EditorWindow
         EditorGUILayout.Space();
 
         EditorGUILayout.LabelField("Character Creator", myStyle);
-        scroll = EditorGUILayout.BeginScrollView(scroll, true, false, GUILayout.Width(Screen.width), GUILayout.Height(Screen.height - 20));
+        scroll = EditorGUILayout.BeginScrollView(scroll, true, false, GUILayout.Width(Screen.width), GUILayout.Height(Screen.height - 55));
 
         if (_head == null)
         {
