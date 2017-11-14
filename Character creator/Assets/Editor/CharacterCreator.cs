@@ -149,9 +149,8 @@ public class CharacterCreator : EditorWindow
         }
         else if (GUI.Button(new Rect(265, 350, 60, 175), _rightLegPreview))
             ((RightLegSelector)GetWindow(typeof(RightLegSelector))).Show();
-        //ACORDATE QUE ACA ABAJO HAY UN O Y TIENE QUE IR UN Y. SE QUE TE VAS A OLVIDAR Y VAS A ENTRAR
-        //EN UNA CRISIS, NO SEAS BOLUDO Y LEEEME, gil.
-        if (_body != null || _head != null && _leftArm != null &&
+        //YA CAMBIASTE EL O POR EL Y NO TE OLVIDES
+        if (_body != null && _head != null && _leftArm != null &&
             _rightArm != null && _leftLeg != null && _rightLeg != null)
         {
             GUILayout.BeginVertical();
