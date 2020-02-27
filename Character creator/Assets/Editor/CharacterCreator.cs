@@ -210,7 +210,7 @@ public class CharacterCreator : EditorWindow
 
                 _Character.AddComponent<Character>();
 
-                var emptyPrefab = PrefabUtility.CreateEmptyPrefab("Assets/Prefab/" + _newName + ".prefab");
+                Object emptyPrefab = PrefabUtility.CreateEmptyPrefab("Assets/Prefab/" + _newName + ".prefab");
                 PrefabUtility.ReplacePrefab(_Character, emptyPrefab);
 
                 AssetDatabase.CreateFolder("Assets/ScriptableObject", _Character.name);
@@ -228,7 +228,34 @@ public class CharacterCreator : EditorWindow
                 ScriptableObjectUtility.CreateAsset<BodypartStats>(path, "Head of " + _Character.name, HeadSelector.life,
                                                                     HeadSelector.shield, HeadSelector.force);
 
-
+                var partStats = _Character.GetComponent<Character>().bodyStats = new BodypartStats();
+                partStats.life = BodySelector.life;
+                partStats.shield = BodySelector.shield;
+                partStats.force = BodySelector.force;
+                partStats = _Character.GetComponent<Character>().headStats = new BodypartStats();
+                partStats.life = HeadSelector.life;
+                partStats.shield = HeadSelector.shield;
+                partStats.force = HeadSelector.force;
+                partStats = _Character.GetComponent<Character>().arm1Stats = new BodypartStats();
+                partStats.life = LeftArmSelector.life;
+                partStats.shield = LeftArmSelector.shield;
+                partStats.force = LeftArmSelector.force;
+                partStats = _Character.GetComponent<Character>().arm2Stats = new BodypartStats();
+                partStats.life = RightArmSelector.life;
+                partStats.shield = RightArmSelector.shield;
+                partStats.force = RightArmSelector.force;
+                partStats = _Character.GetComponent<Character>().leg1Stats = new BodypartStats();
+                partStats.life = LeftLegSelector.life;
+                partStats.shield = LeftLegSelector.shield;
+                partStats.force = LeftLegSelector.force;
+                partStats = _Character.GetComponent<Character>().leg2Stats = new BodypartStats();
+                partStats.life = RightLegSelector.life;
+                partStats.shield = RightLegSelector.shield;
+                partStats.force = RightLegSelector.force;
+                partStats = _Character.GetComponent<Character>().totalStats = new BodypartStats();
+                partStats.life = totalLife;
+                partStats.shield = totalShield;
+                partStats.force = totalForce;
             }
             #endregion
 
