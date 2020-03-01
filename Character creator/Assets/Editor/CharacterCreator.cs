@@ -62,7 +62,7 @@ public class CharacterCreator : EditorWindow
 
     public Searcher partSearcher = new Searcher();
 
-    [MenuItem("CustomWindow/Character creator")]
+    [MenuItem("Editor Windows/Character creator")]
     static void CreateWindow()
     {
         ((CharacterCreator)GetWindow(typeof(CharacterCreator))).Show();
