@@ -3,6 +3,9 @@
 public class Character : MonoBehaviour
 {
     [HideInInspector]
+    public Transform headTrasnform;
+
+    [HideInInspector]
     public BodypartStats totalStats;
     [HideInInspector]
     public BodypartStats bodyStats;
@@ -18,51 +21,83 @@ public class Character : MonoBehaviour
     public BodypartStats leg2Stats;
 
     [HideInInspector]
-    public float totalLife;
+    public int totalLife;
     [HideInInspector]
-    public float totalShield;
+    public int totalShield;
     [HideInInspector]
-    public float totalForce;
+    public int totalForce;
 
     [HideInInspector]
-    public float bodyLife;
+    public int bodyLife;
     [HideInInspector]
-    public float bodyShield;
+    public int bodyShield;
     [HideInInspector]
-    public float bodyForce;
+    public int bodyForce;
 
     [HideInInspector]
-    public float headLife;
+    public int headLife;
     [HideInInspector]
-    public float headShield;
+    public int headShield;
     [HideInInspector]
-    public float headForce;
+    public int headForce;
 
     [HideInInspector]
-    public float arm1Life;
+    public int arm1Life;
     [HideInInspector]
-    public float arm1Shield;
+    public int arm1Shield;
     [HideInInspector]
-    public float arm1Force;
+    public int arm1Force;
 
     [HideInInspector]
-    public float arm2Life;
+    public int arm2Life;
     [HideInInspector]
-    public float arm2Shield;
+    public int arm2Shield;
     [HideInInspector]
-    public float arm2Force;
+    public int arm2Force;
 
     [HideInInspector]
-    public float leg1Life;
+    public int leg1Life;
     [HideInInspector]
-    public float leg1Shield;
+    public int leg1Shield;
     [HideInInspector]
-    public float leg1Force;
+    public int leg1Force;
 
     [HideInInspector]
-    public float leg2Life;
+    public int leg2Life;
     [HideInInspector]
-    public float leg2Shield;
+    public int leg2Shield;
     [HideInInspector]
-    public float leg2Force;
+    public int leg2Force;
+
+    /*
+    private void Start()
+    {
+        totalLife = totalStats.life;
+        totalShield = totalStats.shield;
+        totalForce = totalStats.force;
+
+        headLife = headStats.life;
+        headShield = headStats.shield;
+        headForce = headStats.force;
+
+        bodyLife = bodyStats.life;
+        bodyShield = bodyStats.shield;
+        bodyForce = bodyStats.force;
+
+        arm1Life = arm1Stats.life;
+        arm1Shield = arm1Stats.shield;
+        arm1Force = arm1Stats.force;
+
+        arm2Life = arm2Stats.life;
+        arm2Shield = arm2Stats.shield;
+        arm2Force = arm2Stats.force;
+
+        leg1Life = leg1Stats.life;
+        leg1Shield = leg1Stats.shield;
+        leg1Force = leg1Stats.force;
+
+        leg2Life = leg2Stats.life;
+        leg2Shield = leg2Stats.shield;
+        leg2Force = leg2Stats.force;
+    }*/
 }

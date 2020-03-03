@@ -209,6 +209,7 @@ public class CharacterCreator : EditorWindow
                 _leftLegInstantiated.transform.parent = _Character.transform;
 
                 _Character.AddComponent<Character>();
+                _Character.GetComponent<Character>().headTrasnform = _headInstantiated.transform;
 
                 Object emptyPrefab = PrefabUtility.CreateEmptyPrefab("Assets/Prefab/" + _newName + ".prefab");
                 PrefabUtility.ReplacePrefab(_Character, emptyPrefab);
